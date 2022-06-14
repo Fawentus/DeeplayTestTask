@@ -1,0 +1,25 @@
+{
+  "types": [
+    "S", "W", "T", "P"
+  ],
+  "creatures": [
+    {
+      "name": "Human",
+      "S" : 5,
+      "W" : 2,
+      "T" : 3
+    },
+    {
+      "name": "Swamper",
+      "S" : 2,
+      "W" : 2,
+      "T" : 5
+    },
+    {
+      "name": "Woodman",
+      "S" : 3,
+      "W" : 3,
+      "T" : 2
+    }
+  ]
+}
