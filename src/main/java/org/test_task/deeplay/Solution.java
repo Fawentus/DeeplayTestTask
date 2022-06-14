@@ -2,6 +2,7 @@ package org.test_task.deeplay;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -18,17 +19,16 @@ public class Solution {
         }
         if (updateCosts(pathFile, creature)) {
             return fordBellman(field);
-        }
-        else {
+        } else {
             return dynamics(field);
         }
     }
 
     private static int dynamics(String field) { // TODO подкинь память в 2 строки, можешь ксорить
         var dist = new ArrayList<ArrayList<Integer>>();
-        for (int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             dist.add(new ArrayList<>());
-            for (int j = 0; j < 4; j++){
+            for (int j = 0; j < 4; j++) {
                 dist.get(i).add(null);
             }
         }
@@ -51,7 +51,59 @@ public class Solution {
     }
 
     private static int fordBellman(String field) {
-        return 0;
+        var dist = new ArrayList<Integer>();
+        for (int i = 0; i < 4 * 4; i++) {
+            dist.add(null);
+        }
+        dist.set(0, 0);
+        for (int k = 0; k < 16 * 16 - 1; k++) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if (i + 1 < 4) {
+                        int cost = costs.get(field.charAt(4 * (i + 1) + j));
+                        if (dist.get((i + 1) * 4 + j) == null && dist.get(i * 4 + j) != null) {
+                            dist.set((i + 1) * 4 + j, dist.get(i * 4 + j) + cost);
+                        }
+                        else if (dist.get((i + 1) * 4 + j) != null && dist.get(i * 4 + j) != null
+                                && dist.get((i + 1) * 4 + j) > dist.get(i * 4 + j) + cost) {
+                                dist.set((i + 1) * 4 + j, dist.get(i * 4 + j) + cost);
+                        }
+                    }
+                    if (j + 1 < 4) {
+                        int cost = costs.get(field.charAt(4 * i + (j + 1)));
+                        if (dist.get(i * 4 + j + 1) == null && dist.get(i * 4 + j) != null) {
+                            dist.set(i * 4 + j + 1, dist.get(i * 4 + j) + cost);
+                        }
+                        else if (dist.get(i * 4 + j + 1) != null && dist.get(i * 4 + j) != null
+                                && dist.get(i * 4 + j + 1) > dist.get(i * 4 + j) + cost) {
+                            dist.set(i * 4 + j + 1, dist.get(i * 4 + j) + cost);
+                        }
+                    }
+                    if (i - 1 >= 0) {
+                        int cost = costs.get(field.charAt(4 * (i - 1) + j));
+                        if (dist.get((i - 1) * 4 + j) == null && dist.get(i * 4 + j) != null) {
+                            dist.set((i - 1) * 4 + j, dist.get(i * 4 + j) + cost);
+                        }
+                        else if (dist.get((i - 1) * 4 + j) != null && dist.get(i * 4 + j) != null
+                                && dist.get((i - 1) * 4 + j) > dist.get(i * 4 + j) + cost) {
+                            dist.set((i - 1) * 4 + j, dist.get(i * 4 + j) + cost);
+                        }
+                    }
+                    if (j - 1 >= 0) {
+                        int cost = costs.get(field.charAt(4 * i + (j - 1)));
+                        if (dist.get(i * 4 + j - 1) == null && dist.get(i * 4 + j) != null) {
+                            dist.set(i * 4 + j - 1, dist.get(i * 4 + j) + cost);
+                        }
+                        else if (dist.get(i * 4 + j - 1) != null && dist.get(i * 4 + j) != null
+                                && dist.get(i * 4 + j - 1) > dist.get(i * 4 + j) + cost) {
+                            dist.set(i * 4 + j - 1, dist.get(i * 4 + j) + cost);
+                        }
+                    }
+                }
+            }
+        }
+
+        return dist.get(3 * 4 + 3);
     }
 
     private static boolean updateCosts(Path pathFile, String creature) throws SolutionException {
